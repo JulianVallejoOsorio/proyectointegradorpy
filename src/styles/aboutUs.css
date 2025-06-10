@@ -1,0 +1,142 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+.main-container {
+    max-width: 1440px;
+    margin: 0 auto;
+    box-sizing: border-box;
+}
+
+.aboutus {
+    padding: 2rem 0;
+    background-color: var(--white);
+    color: var(--black);
+    text-align: center;
+    align-items: center;
+}
+
+.section_title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: var(--black);
+    letter-spacing: 1px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 0.5rem;
+}
+
+.section_title::after {
+    content: "";
+    display: block;
+    width: 70px;
+    height: 3px;
+    background-color: var(--green);
+    margin: 0.5rem auto 0;
+    border-radius: 2px;
+}
+
+.aboutus_intro {
+    max-width: 700px;
+    margin: 0 auto 3rem auto;
+    font-size: 1.1rem;
+    font-weight: 400;
+    color: var(--gray);
+    line-height: 1.7;
+}
+
+.aboutus_content {
+    display: flex;
+    justify-content: space-between;
+    gap: 3rem;
+    max-width: 1100px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    text-align: left;
+}
+
+.text_block {
+    flex: 1 1 45%;
+}
+
+.text_block h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--darkgreen);
+    border-left: 5px solid var(--green);
+    padding-left: 1rem;
+    margin-bottom: 1.2rem;
+}
+
+.text_block p {
+    font-size: 1rem;
+    font-weight: 400;
+    color: var(--gray);
+    margin-bottom: 1.3rem;
+    line-height: 1.6;
+}
+
+.image_block {
+    flex: 1 1 45%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image_block img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(12, 129, 94, 0.15);
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.image_block img:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(12, 129, 94, 0.25);
+}
+
+.aboutus_contact-btn {
+    margin-top: 2rem;
+    background-color: var(--whitegrey);
+    border: 2px solid var(--green);
+    color: var(--green);
+    padding: 0.8rem 2.5rem;
+    font-weight: 700;
+    font-size: 1rem;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    display: inline-block;
+    user-select: none;
+    text-decoration: none;
+}
+
+.aboutus_contact-btn:hover {
+    background-color: var(--green);
+    color: var(--white);
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+    .aboutus_content {
+        flex-direction: column;
+        gap: 2rem;
+        text-align: center;
+    }
+
+    .text_block,
+    .image_block {
+        flex: 1 1 100%;
+    }
+
+    .text_block h2 {
+        border-left: none;
+        padding-left: 0;
+    }
+}

@@ -1,0 +1,244 @@
+/* media query para quitar menu mobile */
+
+@media only screen and (min-width:895px) {
+    .mobile {
+        display: none;
+    }
+}
+
+@media only screen and (min-width:1400px) {
+
+    /* Products section */
+    .products_section-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .products_section-container .card {
+        margin: 20px;
+    }
+}
+
+
+
+/* media query del menu mobile */
+@media only screen and (max-width:895px) {
+
+    /* Navbar */
+    .navbar_links {
+        display: none;
+    }
+
+    .buttons {
+        display: none;
+    }
+
+    .navbar nav>* {
+        margin-left: 20px;
+    }
+
+    .mobile {
+        display: flex;
+        flex-direction: column;
+        position: absolute;
+        top: 81.9px;
+        right: 0;
+        background-color: var(--white);
+        width: 100%;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+    }
+
+    .navItems-mobile {
+        margin-left: 40px;
+        font-size: 1.1rem;
+        font-weight: 500;
+        margin-top: 5px;
+    }
+
+    .navItems-mobile {
+        list-style: none;
+        padding: 6px;
+        margin-bottom: 16px;
+
+    }
+
+    .navItems-mobile a {
+        color: var(--black);
+        position: relative;
+    }
+
+    .navbar__toogle-btn {
+        display: block;
+        margin: 0;
+    }
+
+    .navbar__toogle-btn img {
+        height: 28px;
+        margin: 0 10px;
+    }
+
+    /* Efectos */
+    .navItems-mobile a::after {
+        content: "";
+        position: absolute;
+        width: 0%;
+        height: 2px;
+        bottom: 0;
+        left: 50%;
+        background-color: var(--green);
+        opacity: 0;
+        transition: width 0.3s ease-in-out, left 0.3s ease-in-out, opacity 0.3s ease-in-out;
+    }
+
+    .navItems-mobile:hover a::after {
+        opacity: 1;
+        width: 100%;
+        left: 0;
+
+    }
+
+    /* Products section */
+    .products_section-container {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .products_section-container .card {
+        margin: 20px;
+    }
+
+    /* Footer */
+    .footer_section {
+        width: 49%;
+        margin-bottom: 1.5rem;
+    }
+
+    /* Carrito */
+    .cart_item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .item_image img {
+        width: 100%;
+        height: auto;
+    }
+
+    .item_details {
+        width: 100%;
+    }
+
+    .item_actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .cart_summary {
+        text-align: left;
+    }
+}
+
+@media only screen and (max-width:400px) {
+
+    /* Navbar */
+    .buttons {
+        display: flex;
+    }
+
+    .navbar_tools-icons {
+        display: none;
+    }
+
+    .navbar_btn_icons {
+        display: none;
+    }
+
+    /* Footer */
+    .footer_section {
+        width: 100%;
+    }
+
+    .item_details h3 {
+        font-size: 0.9rem;
+    }
+
+    .item_details p {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 480px) {
+    .filters {
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+    }
+
+    .filter-label {
+        padding: 6px 15px;
+        font-size: 0.9rem;
+    }
+}
+
+@media only screen and (max-width:1037px) {
+    .section_card-title {
+        font-size: 2rem;
+    }
+}
+
+@media only screen and (max-width:953px) {
+    .section_card-title {
+        font-size: 1.6rem;
+    }
+
+    .section_card-img {
+        padding: 5px;
+    }
+}
+
+@media only screen and (max-width:895px) {
+    .section_card.show {
+        flex-direction: column;
+        max-height: 100%;
+        margin-bottom: 0;
+    }
+
+    .section_card-content {
+        margin-bottom: 2rem;
+        align-items: center;
+    }
+
+    .carrousel-section-cards {
+        justify-content: flex-end;
+    }
+
+    .section_card-title,
+    .section_card-text {
+        text-align: center;
+    }
+
+}
+
+@media only screen and (max-width:338px) {
+    .section_card-buttons {
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .section_card-buttons a {
+        margin-bottom: 0;
+        text-align: center;
+        width: 100%;
+    }
+
+    .section_card-buttons a:nth-child(1) {
+        margin-bottom: 2px;
+    }
+}

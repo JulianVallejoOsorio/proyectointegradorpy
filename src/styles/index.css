@@ -1,0 +1,127 @@
+/* Se resetea el margin y pading, ademas de importar y añadir el font family */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+/* Colores de la paleta previamente seleccionada */
+:root {
+    /* Color para el fondo de la navbar */
+    --whitegrey: #f9fafb;
+    /*color para algunos de los textos*/
+    --black: #000000;
+    /*color para el fondo de la pagina*/
+    --white: #ffffff;
+    /*color para los botones combinados con el negro*/
+    --green: #0c815e;
+    /*color para algunos de los fondos como el search*/
+    --lightgreen: #edfcf5;
+    /*color para algunos de los textos*/
+    --darkgreen: #0b5a45;
+    /* color gris para las descripciones */
+    --gray: #5f5f6b;
+
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Inter", sans-serif;
+}
+
+.container{
+    max-width: 1440px;
+    padding: 0 20px;
+}
+
+.carrousel-section{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.carrousel-section-cards{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.section_card{
+    display: none;
+}
+
+.section_card.show{
+    display: flex;
+    justify-content: space-around;
+    max-height: 600px;
+}
+
+.section_card-content{
+    flex-basis: 45%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.section_card-title{
+    font-size: 2.35rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 1rem;
+}
+
+.section_card-text{
+    font-size: 1.1rem;
+    font-weight: 400;
+    margin-bottom: 2rem;
+}
+
+.button_secondary {
+    color: var(--black);
+    background-color: #5bce39;
+}
+
+.section_card-imgs{
+    flex-basis: 55%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.section_card-img{
+    padding: 10px;
+}
+
+.section_card-img img{
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+
+.carrousel-control{
+    display: flex;
+    flex-direction: row;
+    position: static;
+    align-items: center;
+}
+
+.prev, .next{
+    color: var(--white);
+    background-color: var(--darkgreen);
+    font-size: 1rem;
+    margin: 0.5rem 0.5rem 0.5rem 0;
+    padding: 0.5rem 0.7rem;
+    border-radius: 5px;
+}
+
+.prev:hover, .next:hover{
+    background-color: var(--green);
+transition: background-color 0.3s ease-in-out;
+}
+
+.button_secondary:hover {
+    background-color: #8dda66;
+    transition: background-color 0.3s ease-in-out;
+}
+
