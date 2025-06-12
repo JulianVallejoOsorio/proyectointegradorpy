@@ -1,77 +1,184 @@
-/* styles/login.css */
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f4f8;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Segoe UI", sans-serif;
 }
 
-.login-container,
-.private-container {
-    background: white;
-    padding: 30px 40px;
-    border-radius: 10px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 320px;
-    text-align: center;
+body, html {
+  height: 100%;
+  background: linear-gradient(to right, #0c8112, #0c8112);
+}
+
+.container {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+}
+
+.form-section {
+  flex: 1;
+  background-color: #fff;
+  padding: 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 3px;
+}
+
+.logo img {
+  width: 200px;
+  height: 80px;
 }
 
 h2 {
-    margin-bottom: 20px;
-    color: #2c3e50;
+  margin-bottom: 20px;
+  font-size: 24px;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
 }
 
 form label {
-    display: block;
-    text-align: left;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #34495e;
+  margin: 10px 0 5px;
+  font-size: 14px;
 }
 
-form input[type="text"],
-form input[type="password"] {
-    width: 100%;
-    padding: 10px 12px;
-    margin-bottom: 18px;
-    border: 1.5px solid #bdc3c7;
-    border-radius: 6px;
-    font-size: 1em;
-    transition: border-color 0.3s ease;
+form input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  transition: border-color 0.2s;
 }
 
-form input[type="text"]:focus,
-form input[type="password"]:focus {
-    outline: none;
-    border-color: #2980b9;
+form input:focus {
+  border-color: #007bff;
+  outline: none;
 }
 
 button {
-    background-color: #27ae60;
-    color: white;
-    border: none;
-    padding: 12px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 1em;
-    font-weight: 600;
-    transition: background-color 0.3s ease;
+  margin-top: 20px;
+  padding: 12px;
+  background: linear-gradient(to right, #0c815e, #fbb03b);
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: opacity 0.2s;
 }
 
 button:hover {
-    background-color: #1e8449;
+  opacity: 0.9;
 }
 
-#btnLogout {
-    background-color: #e74c3c;
+.login-link {
+  margin-top: 20px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.login-link a {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.image-section {
+  flex: 1;
+  background: url("https://github.com/JulianVallejoOsorio/agroJardin/blob/main/src/images/carrousel_images/CarrouselIni.jpg?raw=true" ) no-repeat center center/cover;
+  position: relative;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 50%;
+  height: 100%;
+  padding: 60px;
+  color: white;
+  background: rgba(13, 139, 42, 0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.overlay h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.overlay p {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Errores */
+input.error {
+  border-color: rgb(255, 0, 0);
+}
+
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(5px); }
+  75% { transform: translateX(-5px); }
+  100% { transform: translateX(0); }
+}
+
+form.shake {
+  animation: shake 0.3s;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .container {
+    flex-direction: column;
+  }
+
+  .form-section, .image-section {
     width: 100%;
+    height: auto;
+  }
+
+  .overlay {
+    position: static;
+    width: 100%;
+    padding: 30px;
+  }
+
+  .overlay h1 {
+    font-size: 22px;
+  }
+
+  .overlay p {
+    font-size: 14px;
+  }
 }
 
-#btnLogout:hover {
-    background-color: #c0392b;
+@media (max-width: 500px) {
+  .form-section {
+    padding: 30px 20px;
+  }
+
+  .form-section h2 {
+    font-size: 20px;
+  }
+
+  form label {
+    font-size: 13px;
+  }
+
+  button {
+    font-size: 14px;
+  }
 }
