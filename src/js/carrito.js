@@ -1,223 +1,274 @@
-const USER_ID = 4; // Puedes reemplazarlo con el real si luego lo quieres dinámico
+document.addEventListener('DOMContentLoaded', () => {
+    const carritoItemsContainer = document.getElementById('carritoItems');
+    const totalCarritoElement = document.getElementById('totalCarrito');
+    const finalizarCompraBtn = document.getElementById('finalizarCompraBtn');
 
-// Obtener carrito desde localStorage
-function obtenerCarrito() {
-    return JSON.parse(localStorage.getItem('carrito')) || [];
-}
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const usuarioId = localStorage.getItem('usuario_id');
 
-// Guardar carrito en localStorage
-function guardarCarrito(carrito) {
-    localStorage.setItem('carrito', JSON.stringify(carrito));
-}
-
-// Mostrar carrito en la página
-function mostrarCarrito() {
-    const carritoItems = document.getElementById('carritoItems');
-    const totalCarrito = document.getElementById('totalCarrito');
-    carritoItems.innerHTML = '';
-
-    let total = 0;
-    const carrito = obtenerCarrito();
-
-    if (carrito.length === 0) {
-        carritoItems.innerHTML = '<p>Tu carrito está vacío.</p>';
-        totalCarrito.textContent = 'Total: $0';
+    if (!usuarioId) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'No has iniciado sesión',
+            text: 'Debes iniciar sesión para finalizar la compra.',
+            confirmButtonText: 'Iniciar sesión'
+        }).then(() => {
+            window.location.href = '../pages/login.html';
+        });
         return;
     }
 
-    carrito.forEach((producto, index) => {
-        const subtotal = producto.price * producto.cantidad;
-        total += subtotal;
+    const renderCarrito = () => {
+        carritoItemsContainer.innerHTML = '';
+        let total = 0;
 
-        const itemDiv = document.createElement('div');
-        itemDiv.classList.add('carrito-item');
+        carrito.forEach((producto, index) => {
+            const subtotal = producto.precio * producto.cantidad;
+            total += subtotal;
 
-        itemDiv.innerHTML = `
-            <img src="${producto.image}" alt="${producto.name}" class="carrito-item-img">
-            <div class="carrito-item-info">
-                <h4>${producto.name}</h4>
-                <p>Precio unitario: $${producto.price.toLocaleString()}</p>
-                <label>
-                    Cantidad:
-                    <input type="number" min="1" value="${producto.cantidad}" data-index="${index}" class="cantidad-input" />
-                </label>
-                <p>Subtotal: $${subtotal.toLocaleString()}</p>
-                <button class="btn-eliminar" data-index="${index}">Eliminar</button>
-            </div>
-        `;
-
-        carritoItems.appendChild(itemDiv);
-    });
-
-    totalCarrito.textContent = `Total: $${total.toLocaleString()}`;
-
-    document.querySelectorAll('.cantidad-input').forEach(input => {
-        input.addEventListener('change', cambiarCantidad);
-    });
-
-    document.querySelectorAll('.btn-eliminar').forEach(btn => {
-        btn.addEventListener('click', eliminarDelCarrito);
-    });
-}
-
-function cambiarCantidad(event) {
-    const index = event.target.dataset.index;
-    let nuevaCantidad = parseInt(event.target.value);
-
-    if (isNaN(nuevaCantidad) || nuevaCantidad < 1) {
-        Swal.fire('Error', 'La cantidad debe ser un número mayor o igual a 1.', 'error');
-        event.target.value = 1;
-        nuevaCantidad = 1;
-    }
-
-    const carrito = obtenerCarrito();
-    carrito[index].cantidad = nuevaCantidad;
-    guardarCarrito(carrito);
-    mostrarCarrito();
-}
-
-function eliminarDelCarrito(event) {
-    const index = event.target.dataset.index;
-    let carrito = obtenerCarrito();
-    carrito.splice(index, 1);
-    guardarCarrito(carrito);
-    mostrarCarrito();
-    Swal.fire('Eliminado', 'Producto eliminado del carrito.', 'success');
-}
-
-
-// Login y guardar token
-async function loginYObtenerToken(email, password) {
-    try {
-        const response = await fetch('http://localhost:8081/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ email, password })
+            const itemDiv = document.createElement('div');
+            itemDiv.classList.add('carrito-item');
+            itemDiv.innerHTML = `
+                <img src="${producto.imagen}" alt="${producto.nombre}" class="carrito-item-img">
+                <div class="carrito-item-info">
+                    <h4>${producto.nombre}</h4>
+                    <p>Precio unitario: $${producto.precio.toLocaleString()}</p>
+                    <label>
+                        Cantidad:
+                        <input type="number" min="1" value="${producto.cantidad}" data-index="${index}" class="cantidad-input" />
+                    </label>
+                    <p>Subtotal: $${subtotal.toLocaleString()}</p>
+                    <button class="btn-eliminar" data-index="${index}">Eliminar</button>
+                </div>
+            `;
+            carritoItemsContainer.appendChild(itemDiv);
         });
 
-        if (!response.ok) {
-            throw new Error('Credenciales incorrectas');
+        totalCarritoElement.textContent = `Total: $${total.toLocaleString()}`;
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+    };
+
+    carritoItemsContainer.addEventListener('change', (e) => {
+        if (e.target.classList.contains('cantidad-input')) {
+            const index = e.target.dataset.index;
+            const nuevaCantidad = parseInt(e.target.value);
+            if (nuevaCantidad > 0) {
+                carrito[index].cantidad = nuevaCantidad;
+                renderCarrito();
+            }
         }
+    });
 
-        const data = await response.json();
-        console.log('Respuesta del login:', data);
+    carritoItemsContainer.addEventListener('click', (e) => {
+        if (e.target.classList.contains('btn-eliminar')) {
+            const index = e.target.dataset.index;
 
-        const token = data.token || data.accessToken;
-        if (!token) {
-            throw new Error("Token no recibido del backend");
+            Swal.fire({
+                title: '¿Eliminar este producto?',
+                text: 'Esta acción no se puede deshacer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    carrito.splice(index, 1);
+                    renderCarrito();
+                    Swal.fire('Eliminado', 'El producto ha sido eliminado del carrito.', 'success');
+                }
+            });
         }
+    });
 
-        localStorage.setItem('token', token);
-        localStorage.setItem('userEmail', email);
-        localStorage.setItem('tokenType', data.tokenType || 'Bearer');
-        return token;
-    } catch (error) {
-        console.error('Error en login:', error);
-        Swal.fire('Error de autenticación', error.message, 'error');
-        throw error;
-    }
-}
-
-
-// Finalizar compra
-async function finalizarCompra() {
-    try {
-        const carrito = obtenerCarrito();
+    finalizarCompraBtn.addEventListener('click', async () => {
         if (carrito.length === 0) {
             Swal.fire('Carrito vacío', 'Agrega productos antes de finalizar la compra.', 'info');
             return;
         }
 
-        const token = localStorage.getItem('token');
-        if (!token) {
-            Swal.fire('No autenticado', 'Por favor inicia sesión primero.', 'info');
-            return;
-        }
+        const total = carrito.reduce((acc, p) => acc + p.precio * p.cantidad, 0);
+        const detalle = carrito.map(p => ({
+            id_producto: p.id,
+            cantidad: p.cantidad,
+            precio: p.precio
+        }));
 
-        const total = carrito.reduce((sum, p) => sum + (p.price * p.cantidad), 0);
-
-        const ventaResponse = await fetch('http://localhost:8081/api/sales', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                total: parseFloat(total.toFixed(2)),
-                user: { id: USER_ID }
-            })
-        });
-
-        if (!ventaResponse.ok) {
-            const errorText = await ventaResponse.text();
-            console.error("Error al crear venta:", errorText);
-            throw new Error('Error al crear la venta');
-        }
-
-        const venta = await ventaResponse.json();
-
-        for (const producto of carrito) {
-            const detalleResponse = await fetch('http://localhost:8081/api/sales-details', {
+        try {
+            const response = await fetch('http://localhost:5000/api/ventas', {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    sale: { id: venta.id },
-                    product: { id: producto.id },
-                    quantity: producto.cantidad,
-                    price: producto.price
+                    usuario_id: usuarioId,
+                    total: total,
+                    estado: 'finalizada',
+                    detalle: detalle
                 })
             });
 
-            if (!detalleResponse.ok) {
-                const errorText = await detalleResponse.text();
-                console.error("Error en detalle:", errorText);
-                throw new Error('Error en detalle de venta');
+            if (!response.ok) {
+                const err = await response.json();
+                throw new Error(err.message || 'Error al finalizar la compra.');
             }
-        }
 
-        localStorage.removeItem('carrito');
-        mostrarCarrito();
-        Swal.fire('Compra completada', '¡Gracias por tu compra!', 'success');
-
-    } catch (error) {
-        console.error("Error al finalizar compra:", error);
-        Swal.fire('Error', error.message || 'Ocurrió un error al procesar la compra.', 'error');
-    }
-}
-
-// Inicializar al cargar
-document.addEventListener('DOMContentLoaded', async () => {
-    mostrarCarrito();
-
-    if (!localStorage.getItem('token')) {
-        try {
-            const { value: formValues } = await Swal.fire({
-                title: 'Iniciar sesión',
-                html:
-                    '<input id="swal-email" class="swal2-input" placeholder="Correo electrónico">' +
-                    '<input id="swal-password" type="password" class="swal2-input" placeholder="Contraseña">',
-                focusConfirm: false,
-                preConfirm: () => {
-                    const email = document.getElementById('swal-email').value;
-                    const password = document.getElementById('swal-password').value;
-                    if (!email || !password) {
-                        Swal.showValidationMessage('Email y contraseña requeridos');
-                    }
-                    return { email, password };
-                }
+            Swal.fire({
+                icon: 'success',
+                title: '¡Compra realizada!',
+                text: 'Gracias por tu compra en AgroJardín.'
             });
 
-            if (formValues) {
-                await loginYObtenerToken(formValues.email, formValues.password);
-            }
+            carrito = [];
+            localStorage.removeItem('carrito');
+            renderCarrito();
+
         } catch (error) {
-            console.error("Login automático fallido:", error);
+            Swal.fire('Error', error.message, 'error');
+        }
+    });
+
+    renderCarrito();
+});
+
+const ventasContainer = document.getElementById('ventasHistorico');
+
+// Obtener usuario_id de localStorage
+const usuarioId = localStorage.getItem('usuario_id');
+
+// Función para cargar historial de ventas
+const cargarHistorialDeVentas = async () => {
+    try {
+        const response = await fetch(`http://localhost:5000/api/ventas/usuario/${usuarioId}`);
+        if (!response.ok) throw new Error('Error al obtener historial');
+
+        const ventas = await response.json();
+
+        if (ventas.length === 0) {
+            ventasContainer.innerHTML = '<p>No tienes compras realizadas aún.</p>';
+            return;
+        }
+
+        ventasContainer.innerHTML = '';
+
+        ventas.forEach(venta => {
+            const ventaDiv = document.createElement('div');
+            ventaDiv.classList.add('venta-item');
+
+            let productosHTML = '';
+            venta.detalle.forEach(prod => {
+                productosHTML += `
+                    <div class="detalle-item">
+                        ${prod.nombre_producto} - ${prod.cantidad} x $${parseFloat(prod.precio).toLocaleString()}
+                    </div>
+                `;
+            });
+
+            ventaDiv.innerHTML = `
+                <h4>Venta #${venta.id}</h4>
+                <p><strong>Fecha:</strong> ${venta.fecha}</p>
+                <p><strong>Total:</strong> $${parseFloat(venta.total).toLocaleString()}</p>
+                <div class="detalles-venta">${productosHTML}</div>
+                <div class="venta-actions">
+                    <button class="btn-editar btn-editar-venta" data-id="${venta.id}" data-detalle='${JSON.stringify(venta.detalle)}'>Editar</button>
+                    <button class="btn-eliminar btn-eliminar-venta" data-id="${venta.id}">Eliminar</button>
+                </div>
+            `;
+
+            ventasContainer.appendChild(ventaDiv);
+        });
+
+    } catch (error) {
+        console.error(error);
+        ventasContainer.innerHTML = '<p>Error al cargar historial de compras.</p>';
+    }
+};
+
+// Manejar clics en los botones de eliminar o editar
+ventasContainer.addEventListener('click', async (e) => {
+    const ventaId = e.target.dataset.id;
+
+    // Eliminar venta
+    if (e.target.classList.contains('btn-eliminar-venta')) {
+        const confirm = await Swal.fire({
+            title: '¿Eliminar esta venta?',
+            text: 'Se eliminará la venta y sus productos.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        });
+
+        if (confirm.isConfirmed) {
+            try {
+                const res = await fetch(`http://localhost:5000/api/ventas/${ventaId}`, {
+                    method: 'DELETE'
+                });
+
+                if (!res.ok) throw new Error('Error al eliminar venta');
+
+                Swal.fire('Eliminada', 'Venta eliminada correctamente', 'success');
+                cargarHistorialDeVentas();
+            } catch (err) {
+                Swal.fire('Error', err.message, 'error');
+            }
         }
     }
 
-    const btnFinalizar = document.getElementById('finalizarCompraBtn');
-    btnFinalizar.addEventListener('click', finalizarCompra);
+    // Editar venta
+    if (e.target.classList.contains('btn-editar-venta')) {
+        const detalle = JSON.parse(e.target.dataset.detalle);
+
+        const formHtml = detalle.map((item, index) => `
+            <div style="margin-bottom: 10px;">
+                <label>${item.nombre_producto}</label><br>
+                <input type="number" min="1" value="${item.cantidad}" id="cantidad-${index}" style="width: 60px;" /> x 
+                <input type="number" min="0.01" step="0.01" value="${item.precio}" id="precio-${index}" style="width: 80px;" /> 
+            </div>
+        `).join('');
+
+        const { isConfirmed } = await Swal.fire({
+            title: 'Editar Venta',
+            html: formHtml,
+            focusConfirm: false,
+            showCancelButton: true,
+            confirmButtonText: 'Guardar cambios',
+            cancelButtonText: 'Cancelar',
+            preConfirm: () => {
+                return detalle.map((item, index) => ({
+                    id_producto: item.id_producto,
+                    cantidad: parseInt(document.getElementById(`cantidad-${index}`).value),
+                    precio: parseFloat(document.getElementById(`precio-${index}`).value)
+                }));
+            }
+        });
+
+        if (isConfirmed) {
+            const detalleActualizado = detalle.map((item, index) => ({
+                id_producto: item.id_producto,
+                cantidad: parseInt(document.getElementById(`cantidad-${index}`).value),
+                precio: parseFloat(document.getElementById(`precio-${index}`).value)
+            }));
+
+            const nuevoTotal = detalleActualizado.reduce((acc, item) => acc + item.cantidad * item.precio, 0);
+
+            try {
+                const res = await fetch(`http://localhost:5000/api/ventas/${ventaId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        total: nuevoTotal,
+                        detalle: detalleActualizado
+                    })
+                });
+
+                if (!res.ok) throw new Error('Error al actualizar la venta');
+
+                Swal.fire('Actualizada', 'La venta fue actualizada correctamente.', 'success');
+                cargarHistorialDeVentas();
+            } catch (err) {
+                Swal.fire('Error', err.message, 'error');
+            }
+        }
+    }
 });
+
+// Inicializar historial
+cargarHistorialDeVentas();

@@ -14,10 +14,8 @@ const lastnameGroup = document.getElementById("lastname-group");
 
 let isLogin = false;
 
-// Validación simple
-form.addEventListener("submit", function (e) {
+form.addEventListener("submit", async function (e) {
   e.preventDefault();
-
   let valid = true;
   clearErrors();
 
@@ -42,22 +40,64 @@ form.addEventListener("submit", function (e) {
     valid = false;
   }
 
-  if (!valid) {
-    form.classList.add("shake");
-    setTimeout(() => form.classList.remove("shake"), 300);
-    return;
-  }
+  if (!valid) return shakeForm();
 
   if (isLogin) {
-    alert(`Inicio de sesión exitoso para ${emailInput.value}`);
-  } else {
-    alert(`Usuario ${nameInput.value} ${lastnameInput.value} registrado correctamente`);
-  }
+    // INICIAR SESIÓN
+    try {
+      const res = await fetch("http://localhost:5000/api/usuarios/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          correo: emailInput.value,
+          clave: passwordInput.value
+        })
+      });
 
-  form.reset();
+      const data = await res.json();
+
+      if (res.ok) {
+        Swal.fire("¡Bienvenido!", "Has iniciado sesión correctamente", "success").then(() => {
+          localStorage.setItem("usuario_id", data.usuario_id);
+          form.reset();
+          window.location.href = "../../index.html"; // Cambia esta ruta si es diferente
+        });
+      } else {
+        Swal.fire("Error", data.message || "Credenciales inválidas", "error");
+      }
+    } catch (err) {
+      Swal.fire("Error", "No se pudo conectar con el servidor", "error");
+    }
+  } else {
+    // REGISTRARSE
+    try {
+      const res = await fetch("http://localhost:5000/api/usuarios", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          nombre: nameInput.value,
+          apellido: lastnameInput.value,
+          correo: emailInput.value,
+          clave: passwordInput.value
+        })
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        Swal.fire("Registrado", "Usuario creado correctamente", "success").then(() => {
+          form.reset();
+          toggleLink.click(); // Cambiar automáticamente al formulario de login
+        });
+      } else {
+        Swal.fire("Error", data.message || "No se pudo registrar", "error");
+      }
+    } catch (err) {
+      Swal.fire("Error", "Error de red o servidor", "error");
+    }
+  }
 });
 
-// Funciones auxiliares
 function markError(input) {
   input.classList.add("error");
 }
@@ -70,6 +110,11 @@ function clearErrors() {
 
 function validateEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function shakeForm() {
+  form.classList.add("shake");
+  setTimeout(() => form.classList.remove("shake"), 300);
 }
 
 // Cambio entre login y registro

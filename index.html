@@ -48,6 +48,7 @@
                 </div>
                 <div class="navbar_tools">
                     <ul class="navbar_tools-icons">
+                        <span id="bienvenida" class="navbar_saludo"></span>
                         <li class="navbar_icons">
                             <a href="src/pages/shoppingcar.html">
                                 <img src="src/images/svg_icons/shopping-cart.svg" alt="Carrito">
@@ -76,7 +77,7 @@
                                 <a href="src/pages/aboutUs.html">Sobre nosotros</a>
                             </li>
                             <li class="navItems-mobile buttons">
-                                <a href="#">Iniciar sesion</a>
+                                <a href="src/pages/login.html">Iniciar sesion</a>
                             </li>
                             <li class="navItems-mobile buttons">
                                 <a href="src/pages/favorites.html">Favoritos</a>
@@ -89,21 +90,6 @@
             </nav>
         </section>
     </header>
-    <div id="loginModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Iniciar sesión</h2>
-            <form id="loginForm">
-                <label for="username">Usuario:</label>
-                <input type="text" id="username" name="username" required>
-
-                <label for="password">Contraseña:</label>
-                <input type="password" id="password" name="password" required>
-
-                <button type="submit">Entrar</button>
-            </form>
-        </div>
-    </div>
     <main>
         <section class="carrousel-section">
             <article class="carrousel-section-cards container">

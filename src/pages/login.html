@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login Y Registro</title>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <link rel="stylesheet" href="../styles/login.css" />
   <link rel="stylesheet" href="../styles/style.css" />
 </head>
@@ -21,24 +22,24 @@
       <form id="form">
         <div id="name-group">
           <label>Nombres</label>
-          <input type="text" id="name" placeholder="tus nombres" />
+          <input type="text" id="name" placeholder="Nombre" />
         </div>
 
         <div id="lastname-group">
           <label>Apellidos</label>
-          <input type="text" id="lastname" placeholder="tus apellidos" />
+          <input type="text" id="lastname" placeholder="Apellido" />
         </div>
         <label>Email</label>
-        <input type="email" id="email" placeholder="ejemplo@gmail.com" />
+        <input type="email" id="email" placeholder="Email" />
 
         <label>Contraseña</label>
-        <input type="password" id="password" placeholder="••••••••" />
+        <input type="password" id="password" placeholder="Contraseña" />
 
         <button type="submit" id="submit-btn">Registrarse</button>
       </form>
       <p class="login-link">
         <span id="toggle-msg">¿Ya tienes una cuenta?</span>
-        <a href="/proyectointegradorpy/index.html" id="toggle-link">Iniciar Sesión</a>
+        <a href="../../index.html" id="toggle-link">Iniciar Sesión</a>
       </p>
     </div>
 
